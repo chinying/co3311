@@ -1,13 +1,5 @@
 from units import Perceptron
 
-p = Perceptron([2, 2, 4, -22, -3], [1, -1], [])
-
-def nn_func(a):
-    return filter(lambda x: x < 1, a)
-
-# print(p.solve(nn_func))
-# print(list(nn_and(np.array([15, -2, 3]))))
-
 # OR gate
 def or_net(w, x):
     return sum(w * x)
