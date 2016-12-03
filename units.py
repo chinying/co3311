@@ -3,15 +3,20 @@ import numpy as np
 # a perceptron is defined as a single unit
 class Perceptron:
     # bias can be a function
-    # bias taken in as a list[bias, wt]
-    def __init__(self, units, bias, weights):
+    def __init__(self, units, weights, bias=None):
         self.units = np.array(units) # x1, x2, etc
-        self.bias = bias
         self.weights = np.array(weights)
+        if bias == None:
+            self.bias = (self.units[0], self.weights[0])
+        else:
+            self.bias_func = bias
 
-    def net(self, func, bias_func):
-        bias = bias_func(self.units, self.bias, self.weights) 
-        return bias + func(self.units, self.weights) 
+    # net is just a linear combination of units with weights
+    def net(self):
+        try:
+            return self.bias_func(self) + sum(self.units * self.weights)
+        except AttributeError:
+            return sum(self.units * self.weights)
 
-    def solve(self, func, net_func, bias_func):
-        return func(self.net(net_func, bias_func))
+    def solve(self, func):
+        return func(self.net())
