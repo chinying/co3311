@@ -1,4 +1,5 @@
 from units import Perceptron
+import math
 
 inputs = [[0, 0], [0, 1], [1, 0], [1, 1]]
 
@@ -15,3 +16,14 @@ for i in inputs:
     print("values of inputs " + str(i))
     print("OR %d, AND %d" % (or_gate.solve(), and_gate.solve()))
 
+# Voting circuit
+def voting_bias(u):
+    return -1 * math.ceil(len(u.units)/2)
+
+print("--- Majority circuit example ---")
+population = 7
+for i in range(population):
+    units = [1]*(i)
+    units.extend([0]*(population-i))
+    vote = Perceptron(units, [1]*population, bias=voting_bias, activation_func=threshold)
+    print(units, vote.solve())
