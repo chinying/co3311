@@ -1,23 +1,17 @@
 from units import Perceptron
 
-# OR gate
-def or_output(net):
-    if net < 0:
-        return 0
-    else:
-        return 1
-print("OR gate modelled with perceptron")
-or_gate = Perceptron([1, 0, 0], [-1, 1, 1])
-print(or_gate.solve(or_output))
+inputs = [[0, 0], [0, 1], [1, 0], [1, 1]]
 
-# AND gate
+def threshold(net):
+    return 0 if net < 0 else 1
+
+# AND gate config
 def and_bias(u):
     return -1 * len(u.units)
-def and_output(net):
-    if net < 0:
-        return 0
-    else:
-        return 1
-print("AND gate modelled with perceptron")
-and_gate = Perceptron([1, 1], [1, 1], and_bias)
-print(and_gate.solve(and_output))
+
+for i in inputs:
+    or_gate = Perceptron([1, i[0], i[1]], [-1, 1, 1], activation_func=threshold)
+    and_gate = Perceptron([i[0], i[1]], [1, 1], bias=and_bias, activation_func=threshold)
+    print("values of inputs " + str(i))
+    print("OR %d, AND %d" % (or_gate.solve(), and_gate.solve()))
+

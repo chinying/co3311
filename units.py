@@ -4,9 +4,10 @@ import numpy as np
 class Perceptron:
     # bias can be a function
     # eta is learning rate, used for backpropagation
-    def __init__(self, units, weights, bias=None, eta=None):
+    def __init__(self, units, weights, activation_func, bias=None, eta=None, node_out=None, node_in=None):
         self.units = np.array(units) # x1, x2, etc
         self.weights = np.array(weights)
+        self.activation_func = activation_func
         if bias == None:
             self.bias = (self.units[0], self.weights[0])
         else:
@@ -29,5 +30,5 @@ class Perceptron:
         except AttributeError:
             raise Exception("learning rate not set")
 
-    def solve(self, func):
-        return func(self.net())
+    def solve(self):
+        return self.activation_func(self.net())
