@@ -5,7 +5,18 @@ class Perceptron:
     # bias can be a function
     # eta is learning rate, used for backpropagation
     def __init__(self, units, weights, activation_func, bias=None, eta=None, node_out=None, node_in=None):
-        self.units = np.array(units) # x1, x2, etc
+        intermediate = False
+        tmp = []
+        for unit in units:
+            if type(unit) is Perceptron:
+                intermediate = True
+                tmp.append(unit.solve())
+            else:
+                tmp.append(unit)
+        if intermediate is True:
+            self.units = np.array(tmp)
+        else:
+            self.units = np.array(units) # x1, x2, etc
         self.weights = np.array(weights)
         self.activation_func = activation_func
         if bias == None:
