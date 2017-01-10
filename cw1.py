@@ -1,9 +1,11 @@
+import os
 from units import Perceptron
 import math
 import random
 import numpy as np
 import matplotlib.pyplot as plt
 import time
+import json
 
 def threshold(x):
     return 0 if x < 0 else 1
@@ -19,7 +21,6 @@ def widrow_hoff(expected):
 
 def run(weights, target, learning=0.1, plot=False):
     rounds = 2000
-    rounds += 1
     learning = 0.1
     bias = -1
     inputs = [[1, 0, 0], [1, 0, 1], [1, 1, 0], [1, 1, 1]] # fixed 4 per epoch
@@ -50,7 +51,7 @@ def run(weights, target, learning=0.1, plot=False):
         current_wt = new_wt
 
     sum4 = [sum(np.array(past4[i-3:i+1]) ** 2) for i in range(len(past4)) if i > 2]
-    print(sum4[4000], sum4[8000]) # 1000th and 2000th respectively
+    # print(sum4[3996], sum4[7996]) # 1000th and 2000th respectively
 
     if plot == True:
         plt.plot(sum4)
@@ -63,25 +64,32 @@ def genRand():
     weights = [[random.uniform(-1, 1) for i in range(3)] for j in range(5)]
     learning = [.01, .1, .25, .5, 1, 2]
     return(targets, weights, learning)
-    # print(weights)
 
-def experiment():
-    (i, j, k) = genRand()
+def readFile(filename):
+    fo = open(filename)
+    contents = json.loads(fo.read())
+    return tuple(v for (k,v) in contents.items())
+
+def experiment(params=None):
+    (i, j, k) = genRand() if params == None else params
     cnt = 1
+    print("%s %s %9s %12s %4s %4s" % ("S/N", "Weights [bias, wa, wb]", "4 Targets", "Learning rate", "1000", "2000"))
     for x in i:
         for y in j:
             for z in k:
-                print(cnt, x, y, z)
+                # print(cnt, x, y, z)
+                exp = run(target = x, weights = y, learning = z, plot=False)
+                print(cnt, exp[3996], exp[7996])
+                # print("%d %s %s %s %f %f" % (cnt, y, x, z, exp[3996], exp[7996]))
                 cnt += 1
-                if cnt > 10:
-                    return
-
 
 # genRand()
 # run(weights = [-1, 1, 1], target = [0, 1, 0, 1], plot=False)
 # experiment()
 
-outfile = "files/" + str(time.time()).replace(".", "") + ".txt"
-fo = open(outfile, "w")
-fo.write(str(genRand()))
-fo.close()
+# outfile = "files/" + str(time.time()).replace(".", "") + ".json"
+# fo = open(outfile, "w")
+# (a,b,c) = genRand()
+# fo.write(json.dumps({'targets': a, 'weights': b, 'learning': c}))
+# fo.close()
+# experiment(readFile("files/14840104993299782.json"))
