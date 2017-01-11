@@ -1,3 +1,4 @@
+import decimal
 import os
 from units import Perceptron
 import math
@@ -60,8 +61,8 @@ def run(weights, target, learning=0.1, plot=False):
     return(sum4)
 
 def genRand():
-    targets = [[random.uniform(.1, .9) for i in range(4)] for j in range(5)]
-    weights = [[random.uniform(-1, 1) for i in range(3)] for j in range(5)]
+    targets = [[round(random.uniform(.1, .9), 1) for i in range(4)] for j in range(5)]
+    weights = [[round(random.uniform(-1, 1), 1) for i in range(3)] for j in range(5)]
     learning = [.01, .1, .25, .5, 1, 2]
     return(targets, weights, learning)
 
@@ -92,4 +93,4 @@ def experiment(params=None):
 # (a,b,c) = genRand()
 # fo.write(json.dumps({'targets': a, 'weights': b, 'learning': c}))
 # fo.close()
-# experiment(readFile("files/14840104993299782.json"))
+experiment(readFile("files/1484102052091455.json"))
